@@ -28,7 +28,10 @@ define(["require", "exports", "esri/core/tsSupport/declareExtendsHelper", "esri/
         bookmarkItem: "demo-bookmarks__item",
         bookmarkItemIcon: "demo-bookmarks__item-icon",
         bookmarkItemName: "demo-bookmarks__item-name",
-        bookmarkItemActive: "demo-bookmarks__item--active"
+        bookmarkItemActive: "demo-bookmarks__item--active",
+        backgroundEffect: "demo-bookmarks__item-background-effect",
+        backgroundEffectEnter: "demo-bookmarks__item-background-effect--enter",
+        backgroundEffectExit: "demo-bookmarks__item-background-effect--exit",
     };
     var Bookmarks = /** @class */ (function (_super) {
         __extends(Bookmarks, _super);
@@ -45,6 +48,7 @@ define(["require", "exports", "esri/core/tsSupport/declareExtendsHelper", "esri/
             //
             //--------------------------------------------------------------------------
             _this._handles = new HandleRegistry();
+            _this._selected = null;
             //--------------------------------------------------------------------------
             //
             //  Properties
@@ -87,7 +91,7 @@ define(["require", "exports", "esri/core/tsSupport/declareExtendsHelper", "esri/
             var bookmarkListNode = state === "ready" && bookmarkNodes.length ? [
                 widget_1.tsx("ul", { enterAnimation: fadeInAnimation, "aria-label": i18n.label, class: CSS.bookmarkList }, bookmarkNodes)
             ] :
-                state === "loading" ?
+                state === "loading" || true ?
                     loadingNode :
                     null;
             return (widget_1.tsx("div", { class: CSS.base }, bookmarkListNode));
@@ -107,7 +111,10 @@ define(["require", "exports", "esri/core/tsSupport/declareExtendsHelper", "esri/
             var bookmarkItemClasses = (_a = {},
                 _a[CSS.bookmarkItemActive] = active,
                 _a);
+            var selected = this._selected === bookmarkItem;
+            var transitioner = selected ? (widget_1.tsx("div", { class: CSS.backgroundEffect, enterAnimation: widget_1.cssTransition("enter", CSS.backgroundEffectEnter), exitAnimation: widget_1.cssTransition("exit", CSS.backgroundEffectExit) })) : null;
             return (widget_1.tsx("li", { bind: this, "data-bookmark-item": bookmarkItem, class: this.classes(CSS.bookmarkItem, bookmarkItemClasses), onclick: this._goToBookmark, onkeydown: this._goToBookmark, tabIndex: 0, role: "button", title: i18n.goToBookmark, "aria-label": name },
+                transitioner,
                 widget_1.tsx("span", { class: this.classes(CSS.iconClass, CSS.bookmarkItemIcon) }),
                 widget_1.tsx("span", { class: CSS.bookmarkItemName }, name)));
             var _a;
@@ -130,6 +137,7 @@ define(["require", "exports", "esri/core/tsSupport/declareExtendsHelper", "esri/
         Bookmarks.prototype._goToBookmark = function (event) {
             var node = event.currentTarget;
             var bookmarkItem = node["data-bookmark-item"];
+            this._selected = bookmarkItem;
             this.viewModel.goTo(bookmarkItem);
         };
         __decorate([

@@ -25,7 +25,10 @@ const CSS = {
   bookmarkItem: "demo-bookmarks__item",
   bookmarkItemIcon: "demo-bookmarks__item-icon",
   bookmarkItemName: "demo-bookmarks__item-name",
-  bookmarkItemActive: "demo-bookmarks__item--active"
+  bookmarkItemActive: "demo-bookmarks__item--active",
+  backgroundEffect: "demo-bookmarks__item-background-effect",
+  backgroundEffectEnter: "demo-bookmarks__item-background-effect--enter",
+  backgroundEffectExit: "demo-bookmarks__item-background-effect--exit",
 };
 
 @subclass("demo.Bookmarks")
@@ -154,9 +157,9 @@ class Bookmarks extends declared(Widget) {
 
     const selected = this._selected === bookmarkItem;
     const transitioner = selected ? (
-      <div class="transitioner"
-           enterAnimation={cssTransition("enter", "esri-bookmarks__item--enter")}
-           exitAnimation={cssTransition("exit", "esri-bookmarks__item--exit")}
+      <div class={CSS.backgroundEffect}
+           enterAnimation={cssTransition("enter", CSS.backgroundEffectEnter)}
+           exitAnimation={cssTransition("exit", CSS.backgroundEffectExit)}
       />
     ) : null;
 

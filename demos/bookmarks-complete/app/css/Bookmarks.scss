@@ -8,6 +8,7 @@
 
   &__loading {
     padding: 40px;
+    text-align: center;
   }
 
   &__list {
@@ -56,10 +57,53 @@
 
     &-icon {
       margin-right: 5px;
+      z-index: 0;
     }
 
     &-name {
       flex: 1;
+      z-index: 0;
+    }
+
+    &-background-effect {
+      background-color: #e8912e;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 0;
+
+      &--enter {
+        height: 0;
+        width: 0;
+
+        &-active {
+          animation: background-item-enter 350ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+      }
+
+      &--exit {
+        margin-left: auto;
+
+        &-active {
+          animation: background-item-enter 350ms cubic-bezier(0.23, 1, 0.32, 1) reverse;
+        }
+      }
+    }
+
+    @keyframes background-item-enter {
+      0% {
+        height: 100%;
+        width: 0;
+        opacity: 0;
+      }
+      75%,
+      100% {
+        opacity: 1;
+        height: 100%;
+        width: 100%;
+      }
     }
 
   }
@@ -127,4 +171,3 @@ html[dir="rtl"] .demo-bookmarks {
     }
   }
 }
-
