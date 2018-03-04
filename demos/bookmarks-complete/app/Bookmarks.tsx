@@ -57,6 +57,8 @@ class Bookmarks extends declared(Widget) {
 
   _handles: HandleRegistry = new HandleRegistry();
 
+  _selected: BookmarkItem = null;
+
   //--------------------------------------------------------------------------
   //
   //  Properties
@@ -122,7 +124,7 @@ class Bookmarks extends declared(Widget) {
         class={CSS.bookmarkList}
       >{bookmarkNodes}</ul>
     ] :
-      state === "loading" ?
+      state === "loading" || true ?
         loadingNode :
         null;
 
@@ -150,6 +152,14 @@ class Bookmarks extends declared(Widget) {
       [CSS.bookmarkItemActive]: active
     };
 
+    const selected = this._selected === bookmarkItem;
+    const transitioner = selected ? (
+      <div class="transitioner"
+           enterAnimation={cssTransition("enter", "esri-bookmarks__item--enter")}
+           exitAnimation={cssTransition("exit", "esri-bookmarks__item--exit")}
+      />
+    ) : null;
+
     return (
       <li bind={this}
         data-bookmark-item={bookmarkItem}
@@ -161,6 +171,7 @@ class Bookmarks extends declared(Widget) {
         title={i18n.goToBookmark}
         aria-label={name}
       >
+        {transitioner}
         <span class={this.classes(CSS.iconClass, CSS.bookmarkItemIcon)} /><span class={CSS.bookmarkItemName}>{name}</span>
       </li>
     );
@@ -189,6 +200,7 @@ class Bookmarks extends declared(Widget) {
   private _goToBookmark(event: Event): void {
     const node = event.currentTarget as Element;
     const bookmarkItem = node["data-bookmark-item"] as BookmarkItem;
+    this._selected = bookmarkItem;
     this.viewModel.goTo(bookmarkItem);
   }
 
